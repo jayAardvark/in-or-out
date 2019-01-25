@@ -1,3 +1,2 @@
 ## Single-Page App geared towards instrument maintenance.
-#### - will utilize data to determine suggestions to the user.
-#### - will utilize React.
+#### SPA using React, APIs, Bootstrap, and others to-be-determined.
