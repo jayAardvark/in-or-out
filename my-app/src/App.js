@@ -7,7 +7,12 @@ import API_KEY from "./config/keys";
 class App extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      temp: undefined,
+      humidity: undefined,
+      place: undefined,
+      error: undefined
+    };
   }
 
   //retrieve data from API
@@ -27,7 +32,21 @@ class App extends Component {
     //convert api_call data to json
     const data = await api_call.json();
 
-    console.log(data);
+    if (data.name) {
+      this.setState({
+        temp: data.main.temp,
+        humidity: data.main.humidity,
+        place: data.name,
+        error: undefined
+      });
+    } else {
+      this.setState({
+        temp: undefined,
+        humidity: undefined,
+        place: undefined,
+        error: "Invalid inputs..."
+      });
+    }
   };
 
   render() {
@@ -36,7 +55,12 @@ class App extends Component {
         <Welcome />
         {/* The Form component will now have access to retrieveData function in props */}
         <Form retrieveData={this.retrieveData} />
-        <Output />
+        <Output
+          temperature={this.state.temp}
+          humidity={this.state.humidity}
+          place={this.state.place}
+          error={this.state.error}
+        />
       </div>
     );
   }
