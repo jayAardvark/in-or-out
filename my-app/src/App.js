@@ -3,6 +3,7 @@ import Welcome from "./components/Welcome";
 import Form from "./components/Form";
 import Output from "./components/Output";
 import API_KEY from "./config/keys";
+import classnames from "classnames";
 
 class App extends Component {
   constructor() {
@@ -11,11 +12,12 @@ class App extends Component {
       temp: undefined,
       humidity: undefined,
       place: undefined,
-      error: undefined
+      error: undefined,
+      inOrOut: undefined
     };
   }
 
-  //retrieve data from API
+  //retrieve data from API and set appropriate states
   retrieveData = async e => {
     e.preventDefault();
 
@@ -33,6 +35,14 @@ class App extends Component {
     const data = await api_call.json();
 
     if (data.name) {
+      if (data.main.humidity <= 60 && data.main.humidity >= 40) {
+        this.setState({
+          inOrOut: "out"
+        });
+      } else if (data.main.humidity > 60 || data.main.humidity < 40) {
+        this.setState({ inOrOut: "in" });
+      } else return;
+
       this.setState({
         temp: data.main.temp,
         humidity: data.main.humidity,
@@ -52,15 +62,33 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Welcome />
-        {/* The Form component will now have access to retrieveData function in props */}
-        <Form retrieveData={this.retrieveData} />
-        <Output
-          temperature={this.state.temp}
-          humidity={this.state.humidity}
-          place={this.state.place}
-          error={this.state.error}
-        />
+        <div className="wrapper">
+          <div className="main">
+            <div className="container">
+              <div className="row">
+                <div
+                  className={classnames("col-xs-5", {
+                    "welcome-container": this.state.inOrOut == undefined,
+                    "welcome-container-in": this.state.inOrOut == "in",
+                    "welcome-container-out": this.state.inOrOut == "out"
+                  })}
+                >
+                  <Welcome inOrOut={this.state.inOrOut} />
+                </div>
+                <div className="col-xs-7 form-container">
+                  {/* The Form component will now have access to retrieveData function in props */}
+                  <Form retrieveData={this.retrieveData} />
+                  <Output
+                    temperature={this.state.temp}
+                    humidity={this.state.humidity}
+                    place={this.state.place}
+                    error={this.state.error}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
