@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Welcome from "./components/Welcome";
 import Form from "./components/Form";
 import Output from "./components/Output";
+import OutputTwo from "./components/OutputTwo";
 import API_KEY from "./config/keys";
 import classnames from "classnames";
 
@@ -68,17 +69,23 @@ class App extends Component {
               <div className="row">
                 <div
                   className={classnames("col-xs-5", {
-                    "welcome-container": this.state.inOrOut == undefined,
-                    "welcome-container-in": this.state.inOrOut == "in",
-                    "welcome-container-out": this.state.inOrOut == "out"
+                    "welcome-container": this.state.inOrOut === undefined,
+                    "welcome-container-in": this.state.inOrOut === "in",
+                    "welcome-container-out": this.state.inOrOut === "out"
                   })}
                 >
                   <Welcome inOrOut={this.state.inOrOut} />
                 </div>
-                <div className="col-xs-7 form-container">
+                <div className="col-xs-7 output-container">
                   {/* The Form component will now have access to retrieveData function in props */}
-                  <Form retrieveData={this.retrieveData} />
                   <Output
+                    temperature={this.state.temp}
+                    humidity={this.state.humidity}
+                    place={this.state.place}
+                    error={this.state.error}
+                  />
+                  <Form retrieveData={this.retrieveData} />
+                  <OutputTwo
                     temperature={this.state.temp}
                     humidity={this.state.humidity}
                     place={this.state.place}
