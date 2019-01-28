@@ -29,7 +29,7 @@ class App extends Component {
     }
 
     const api_call = await fetch(
-      `http://api.openweathermap.org/data/2.5/weather?q=${location}${country}&appid=${API_KEY}&units=imperial`
+      `https://api.openweathermap.org/data/2.5/weather?q=${location}${country}&appid=${API_KEY}&units=imperial`
     );
 
     //convert api_call data to json
